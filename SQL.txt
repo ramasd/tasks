@@ -1,0 +1,74 @@
+Varžybu selektas:
+---------------------------
+SELECT
+g.id,
+t1.team AS 'home_team',
+t2.team AS 'away_team'
+FROM games g
+INNER JOIN teams t1
+ON g.home_team = t1.id
+INNER JOIN teams t2
+ON g.away_team = t2.id
+---------------------------
+
+SELECT
+g.id,
+t1.team AS 'home_team',
+r.home_score,
+r.away_score,
+t2.team AS 'away_team',
+g.game_data AS 'data',
+g.game_time AS 'time'
+FROM games g
+INNER JOIN teams t1
+ON g.home_team = t1.id
+INNER JOIN teams t2
+ON g.away_team = t2.id
+INNER JOIN results r
+ON g.id = r.game_id
+---------------------------
+
+SELECT
+g.id,
+p.home_prediction,
+t1.team AS 'home_team',
+r.home_score,
+r.away_score,
+t2.team AS 'away_team',
+p.away_prediction,
+p.points,
+g.game_data AS 'data',
+g.game_time AS 'time'
+FROM games g
+LEFT JOIN teams t1
+ON g.home_team = t1.id
+LEFT JOIN teams t2
+ON g.away_team = t2.id
+LEFT JOIN results r
+ON g.id = r.game_id
+LEFT JOIN predictions p
+ON g.id = p.game_id
+-----------------------------
+
+SELECT
+g.id,
+p.user_id,
+p.home_prediction,
+t1.team AS 'home_team',
+r.home_score,
+r.away_score,
+t2.team AS 'away_team',
+p.away_prediction,
+p.points,
+g.game_data AS 'data',
+g.game_time AS 'time'
+FROM games g
+LEFT JOIN teams t1
+ON g.home_team = t1.id
+LEFT JOIN teams t2
+ON g.away_team = t2.id
+LEFT JOIN results r
+ON g.id = r.game_id
+LEFT JOIN predictions p
+ON g.id = p.game_id
+HAVING p.user_id=1
