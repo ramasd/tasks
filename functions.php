@@ -2,7 +2,7 @@
 
 session_start();
 
-$db = mysqli_connect('localhost', 'root', '', 'tasks_list');
+$db = mysqli_connect('localhost', 'root', '', 'fifa');
 
 $username = "";
 $email = "";
@@ -114,7 +114,7 @@ if (isset($_POST['add'])) {
     $description = $_POST['description'];
     $user = $_POST['user'];
 
-    mysqli_query($db, "INSERT INTO tasks (title, description, user)"
+    mysqli_query($db, "INSERT INTO predictions (title, description, user)"
             . "VALUES ('$title', '$description', '$user')");
     $_SESSION['message'] = "Task added!";
     header('location: admin/home.php');
@@ -128,7 +128,7 @@ if (isset($_POST['update'])) {
     $user = $_POST['user'];
     $completed = $_POST['completed'];
 
-    $update = "UPDATE tasks SET title='$title',description='$description',"
+    $update = "UPDATE predictions SET title='$title',description='$description',"
             . "user='$user', completed='$completed' WHERE id=$id";
     mysqli_query($db, $update);
 
@@ -142,7 +142,7 @@ if (isset($_POST['update'])) {
 
 if (isset($_GET['del'])) {
     $id = $_GET['del'];
-    mysqli_query($db, "DELETE FROM tasks WHERE id=$id");
+    mysqli_query($db, "DELETE FROM predictions WHERE id=$id");
     $_SESSION['message'] = "Task deleted!";
     header('location: admin/home.php');
 }
@@ -207,7 +207,7 @@ function issetEdit() {
     if (isset($_GET['edit'])) {
         $id = $_GET['edit'];
         $update = true;
-        $record = mysqli_query($db, "SELECT * FROM tasks WHERE id=$id");
+        $record = mysqli_query($db, "SELECT * FROM predictions WHERE id=$id");
 
         if (!empty($record)) {
             $n = mysqli_fetch_array($record);
@@ -224,5 +224,30 @@ function message() {
     if (isset($_SESSION['message'])){
         echo $_SESSION['message'];
         unset($_SESSION['message']);
+    }
+}
+
+//// žiūrėt:
+function insert() {
+    global $db, $errors, $username, $email;
+    if(mysqli_connect_errno()){
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        exit();
+    }else{
+        var_dump($_POST);
+        $sql = "INSERT INTO predictions (user_id, match_id, home_prediction, away_prediction) VALUES (". $_SESSION['user']['id'].", ".$_POST['match_id'].", ".$_POST['home_prediction'].", ".$_POST['away_prediction'].")";
+        echo '<br>';
+        var_dump($sql);
+        echo '<br>';
+        echo '<br>';
+        echo $_SESSION['user']['id'];
+        $res = mysqli_query($db, $sql);
+        if($res === TRUE){
+            echo "A record has been inserted.";
+        }else{
+            printf("Could not insert record: %s\n". mysqli_error($db));
+        }
+        mysqli_close($db);
+        echo "<meta http-equiv='refresh' content='0'>";
     }
 }

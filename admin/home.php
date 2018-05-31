@@ -52,7 +52,7 @@ list($id, $title, $description, $user, $completed, $update) = issetEdit();
                 <div style="color:blue"><strong><?php message(); ?></strong></div>
                 <div>
                     <?php 
-                        $sql = "SELECT tasks.*, username FROM tasks LEFT JOIN users ON tasks.user = users.id";
+                        $sql = "SELECT predictions.*, username FROM predictions LEFT JOIN users ON predictions.user = users.id";
                         $results = mysqli_query($db, $sql);
                     ?>
 
